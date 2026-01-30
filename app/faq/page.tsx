@@ -26,9 +26,11 @@ const faqs = [
 ];
 
 export default function FAQPage() {
-  const [openIndex, setOpenIndex] = useState(null);
+  // ✅ Add type: number or null
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const toggleFAQ = (index) => {
+  // ✅ Type index as number
+  const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
