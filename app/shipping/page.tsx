@@ -2,11 +2,31 @@
 
 import { useState, ChangeEvent, FormEvent } from "react";
 import Link from "next/link";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../context/CartContext"; // adjust path if needed
+
+// Define the type of a product in the cart
+interface CartProduct {
+  _id: string;
+  title: string;
+  price: number;
+  quantity?: number;
+}
+
+interface ShippingForm {
+  fullName: string;
+  email: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+  phone: string;
+}
 
 export default function ShippingPage() {
-  const { cart } = useCart();
-  const [formData, setFormData] = useState({
+  const { cart } = useCart() as { cart: CartProduct[] }; // type assertion
+
+  const [formData, setFormData] = useState<ShippingForm>({
     fullName: "",
     email: "",
     address: "",
@@ -21,15 +41,16 @@ export default function ShippingPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  // Type-safe input change handler
+  // Handle form input changes
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (cart.length === 0) {
+    if (!cart || cart.length === 0) {
       setError("Your cart is empty.");
       return;
     }
@@ -76,6 +97,7 @@ export default function ShippingPage() {
         </p>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
+          {/* Full Name */}
           <div>
             <label className="block text-gray-300 mb-1">Full Name</label>
             <input
@@ -89,6 +111,7 @@ export default function ShippingPage() {
             />
           </div>
 
+          {/* Email */}
           <div>
             <label className="block text-gray-300 mb-1">Email</label>
             <input
@@ -102,6 +125,7 @@ export default function ShippingPage() {
             />
           </div>
 
+          {/* Address */}
           <div>
             <label className="block text-gray-300 mb-1">Address</label>
             <input
@@ -115,6 +139,7 @@ export default function ShippingPage() {
             />
           </div>
 
+          {/* City & State */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-300 mb-1">City</label>
@@ -142,6 +167,7 @@ export default function ShippingPage() {
             </div>
           </div>
 
+          {/* ZIP & Country */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-300 mb-1">ZIP Code</label>
@@ -169,6 +195,7 @@ export default function ShippingPage() {
             </div>
           </div>
 
+          {/* Phone */}
           <div>
             <label className="block text-gray-300 mb-1">Phone Number</label>
             <input
@@ -190,13 +217,23 @@ export default function ShippingPage() {
             {loading ? "Submitting..." : "Continue to Payment"}
           </button>
 
-          {success && <p className="text-green-400 text-center mt-2">Shipping info submitted successfully!</p>}
-          {error && <p className="text-red-400 text-center mt-2">{error}</p>}
+          {success && (
+            <p className="text-green-400 text-center mt-2">
+              Shipping info submitted successfully!
+            </p>
+          )}
+
+          {error && (
+            <p className="text-red-400 text-center mt-2">{error}</p>
+          )}
         </form>
 
         <p className="text-center text-gray-400 mt-6">
           Want to go back?{" "}
-          <Link href="/cart" className="text-indigo-400 hover:text-indigo-500 font-semibold transition">
+          <Link
+            href="/cart"
+            className="text-indigo-400 hover:text-indigo-500 font-semibold transition"
+          >
             Back to Cart
           </Link>
         </p>
