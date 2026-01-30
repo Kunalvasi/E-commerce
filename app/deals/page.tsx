@@ -30,7 +30,7 @@ export default async function DealsPage() {
           {dealProducts.map((product) => (
             <ProductCard
               key={product._id}
-              id={product._id}
+              _id={product._id}
               title={product.title}
               price={product.price}
               image={product.image}
