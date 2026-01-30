@@ -6,13 +6,23 @@ export const metadata = {
   title: "Shop | ShopEase",
 };
 
+// ✅ Define a TypeScript type for your product
+type ProductType = {
+  _id: string;
+  title: string;
+  price: number;
+  description?: string;
+  image?: string;
+  [key: string]: any; // optional, for extra fields
+};
+
 export default async function ShopPage() {
   await connectDB();
 
   const products = await Product.find({});
 
-  // ✅ Convert MongoDB documents → plain JS objects
-  const safeProducts = JSON.parse(JSON.stringify(products));
+  // Convert MongoDB documents → plain JS objects
+  const safeProducts: ProductType[] = JSON.parse(JSON.stringify(products));
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
@@ -20,7 +30,7 @@ export default async function ShopPage() {
 
       {safeProducts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {safeProducts.map((product) => (
+          {safeProducts.map((product: ProductType) => (
             <ProductCard key={product._id} {...product} />
           ))}
         </div>
