@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -11,11 +12,13 @@ export default function ContactPage() {
 
   const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (e) => {
+  // ✅ Typed handleChange
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  // ✅ Typed handleSubmit
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -39,7 +42,6 @@ export default function ContactPage() {
       alert("Failed to send message.");
     }
   };
-
 
   return (
     <div className="relative bg-gradient-to-br from-gray-900 to-indigo-900 min-h-screen py-16 text-white">
@@ -161,7 +163,7 @@ export default function ContactPage() {
           width="100%"
           height="100%"
           style={{ border: 0, filter: "grayscale(80%) contrast(120%)" }}
-          allowFullScreen=""
+          allowFullScreen
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
