@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  // ✅ Type the event correctly
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Reset password request for:", email);
     setSubmitted(true); // Show confirmation message
@@ -23,7 +24,9 @@ export default function ForgotPasswordPage() {
 
         {submitted ? (
           <div className="text-center text-green-400">
-            <p>Check your email! We sent password reset instructions to <strong>{email}</strong>.</p>
+            <p>
+              Check your email! We sent password reset instructions to <strong>{email}</strong>.
+            </p>
             <Link
               href="/login"
               className="inline-block mt-4 px-6 py-2 bg-indigo-600 rounded-full text-white font-semibold hover:bg-indigo-700 transition"
