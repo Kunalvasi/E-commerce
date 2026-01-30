@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 
 export default function ReturnsPage() {
   const [formData, setFormData] = useState({
@@ -13,12 +13,12 @@ export default function ReturnsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ TypeScript-safe event type
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // ✅ Explicitly type the event
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -37,7 +37,6 @@ export default function ReturnsPage() {
       }
 
       setSubmitted(true);
-      setFormData({ orderId: "", email: "", reason: "" }); // reset form
     } catch (err: any) {
       setError(err.message);
     } finally {
