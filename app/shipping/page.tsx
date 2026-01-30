@@ -2,7 +2,7 @@
 
 import { useState, ChangeEvent, FormEvent } from "react";
 import Link from "next/link";
-import { useCart } from "../context/CartContext"; // Adjust the path if needed
+import { useCart } from "../context/CartContext";
 
 export default function ShippingPage() {
   const { cart } = useCart();
@@ -21,12 +21,11 @@ export default function ShippingPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  // Handle form input changes
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  // Type-safe input change handler
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -49,7 +48,7 @@ export default function ShippingPage() {
             _id: p._id,
             title: p.title,
             price: p.price,
-            quantity: p.quantity || 1, // default to 1 if missing
+            quantity: p.quantity || 1,
           })),
         }),
       });
@@ -61,9 +60,7 @@ export default function ShippingPage() {
 
       setSuccess(true);
       alert("Shipping info and products submitted successfully!");
-      // Optionally: clear cart or redirect user
     } catch (err: any) {
-      console.error(err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -79,7 +76,6 @@ export default function ShippingPage() {
         </p>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
-          {/* Full Name */}
           <div>
             <label className="block text-gray-300 mb-1">Full Name</label>
             <input
@@ -93,7 +89,6 @@ export default function ShippingPage() {
             />
           </div>
 
-          {/* Email */}
           <div>
             <label className="block text-gray-300 mb-1">Email</label>
             <input
@@ -107,7 +102,6 @@ export default function ShippingPage() {
             />
           </div>
 
-          {/* Address */}
           <div>
             <label className="block text-gray-300 mb-1">Address</label>
             <input
@@ -121,7 +115,6 @@ export default function ShippingPage() {
             />
           </div>
 
-          {/* City & State */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-300 mb-1">City</label>
@@ -149,7 +142,6 @@ export default function ShippingPage() {
             </div>
           </div>
 
-          {/* ZIP & Country */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-300 mb-1">ZIP Code</label>
@@ -177,7 +169,6 @@ export default function ShippingPage() {
             </div>
           </div>
 
-          {/* Phone */}
           <div>
             <label className="block text-gray-300 mb-1">Phone Number</label>
             <input
@@ -191,7 +182,6 @@ export default function ShippingPage() {
             />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -200,23 +190,13 @@ export default function ShippingPage() {
             {loading ? "Submitting..." : "Continue to Payment"}
           </button>
 
-          {success && (
-            <p className="text-green-400 text-center mt-2">
-              Shipping info submitted successfully!
-            </p>
-          )}
-
-          {error && (
-            <p className="text-red-400 text-center mt-2">{error}</p>
-          )}
+          {success && <p className="text-green-400 text-center mt-2">Shipping info submitted successfully!</p>}
+          {error && <p className="text-red-400 text-center mt-2">{error}</p>}
         </form>
 
         <p className="text-center text-gray-400 mt-6">
           Want to go back?{" "}
-          <Link
-            href="/cart"
-            className="text-indigo-400 hover:text-indigo-500 font-semibold transition"
-          >
+          <Link href="/cart" className="text-indigo-400 hover:text-indigo-500 font-semibold transition">
             Back to Cart
           </Link>
         </p>
