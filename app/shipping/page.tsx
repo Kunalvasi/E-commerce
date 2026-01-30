@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import Link from "next/link";
-import { useCart } from "../context/CartContext"; // relative import to CartContext
+import { useCart } from "../context/CartContext"; // Adjust the path if needed
 
 export default function ShippingPage() {
-  const { cart } = useCart(); // get products from cart
+  const { cart } = useCart();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -22,12 +22,12 @@ export default function ShippingPage() {
   const [error, setError] = useState("");
 
   // Handle form input changes
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (cart.length === 0) {
@@ -49,7 +49,7 @@ export default function ShippingPage() {
             _id: p._id,
             title: p.title,
             price: p.price,
-            quantity: p.quantity || 1, // default 1 if quantity missing
+            quantity: p.quantity || 1, // default to 1 if missing
           })),
         }),
       });
@@ -61,8 +61,8 @@ export default function ShippingPage() {
 
       setSuccess(true);
       alert("Shipping info and products submitted successfully!");
-      // Optionally clear cart or redirect to payment page
-    } catch (err) {
+      // Optionally: clear cart or redirect user
+    } catch (err: any) {
       console.error(err);
       setError(err.message);
     } finally {
