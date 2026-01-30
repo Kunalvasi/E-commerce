@@ -13,11 +13,12 @@ export default function ReturnsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleChange = (e) => {
+  // ✅ TypeScript-safe event type
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -36,7 +37,8 @@ export default function ReturnsPage() {
       }
 
       setSubmitted(true);
-    } catch (err) {
+      setFormData({ orderId: "", email: "", reason: "" }); // reset form
+    } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
@@ -57,11 +59,8 @@ export default function ReturnsPage() {
           </div>
         ) : (
           <form className="space-y-4" onSubmit={handleSubmit}>
-            {error && (
-              <p className="text-red-500 text-center">{error}</p>
-            )}
+            {error && <p className="text-red-500 text-center">{error}</p>}
 
-            {/* Order ID */}
             <div>
               <label className="block text-gray-300 mb-1">Order ID</label>
               <input
@@ -75,7 +74,6 @@ export default function ReturnsPage() {
               />
             </div>
 
-            {/* Email */}
             <div>
               <label className="block text-gray-300 mb-1">Email</label>
               <input
@@ -89,7 +87,6 @@ export default function ReturnsPage() {
               />
             </div>
 
-            {/* Reason */}
             <div>
               <label className="block text-gray-300 mb-1">Reason for Return</label>
               <textarea
@@ -103,7 +100,6 @@ export default function ReturnsPage() {
               ></textarea>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
